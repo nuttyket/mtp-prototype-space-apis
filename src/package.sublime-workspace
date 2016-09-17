@@ -1,0 +1,243 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"vi",
+				"visibility"
+			],
+			[
+				"video",
+				"video_overlay"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"idx",
+				"idxNewHotspot"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/Users/njosh1/work/Florida Crystals/XT-Prototype/node_modules/grunt/node_modules/dateformat/node_modules/meow/node_modules/normalize-package-data/test/fixtures/npm.json",
+			"settings":
+			{
+				"buffer_size": 2826,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/njosh1/Downloads/TateampampLyleSugars-2016-03-22T16-46-21",
+		"/Users/njosh1/work/Florida Crystals/XT-Prototype/Gruntfile.js",
+		"/Users/njosh1/work/Florida Crystals/Content/chsugar.com/Bakesale/Bake-Sale-Tips.html",
+		"/Users/njosh1/work/holt renfrew/httpd.conf",
+		"/Users/njosh1/work/Florida Crystals/composer.json",
+		"/Users/njosh1/work/CMTOU/RnD/IFTTT-Maker-Test.html",
+		"/Users/njosh1/work/CMTOU/RnD/node_programs/ultrSonicSensor/myapi.js",
+		"/Users/njosh1/work/CMTOU/RnD/Overlay-Demo-Final.html",
+		"/Users/njosh1/work/CMTOU/Demo-Home.html",
+		"/Users/njosh1/work/CMTOU/RnD/HTML5-Demo-AllTogether-Final.html",
+		"/Users/njosh1/Desktop/Test.html",
+		"/Users/njosh1/work/CMTOU/RnD/tracks/trailer-metadata-en.vtt",
+		"/Users/njosh1/work/CMTOU/RnD/hotspot-sampleCode.html",
+		"/Users/njosh1/work/CMTOU/RnD/ReferenceCode/GitURL.txt",
+		"/Users/njosh1/work/CMTOU/RnD/HTML5-Demo-1.html",
+		"/Users/njosh1/work/CMTOU/RnD/Overlay-Demo.html",
+		"/Users/njosh1/work/CMTOU/RnD/Test.html",
+		"/Users/njosh1/work/CMTOU/RnD/html5video-master/balloons/balloons.html",
+		"/Users/njosh1/work/CMTOU/RnD/tracks/subtitles_en.vtt",
+		"/Users/njosh1/work/CMTOU/RnD/html5video-master/balloons/tracks/trailer-metadata-en.vtt",
+		"/Users/njosh1/work/CMTOU/RnD/html5video-master/subtitles_changer/subtitles_changer.html",
+		"/Users/njosh1/work/CMTOU/RnD/html5video-master/subtitles/subtitles.html",
+		"/Users/njosh1/Sites/drupal/sites/settings.php",
+		"/private/var/folders/pn/0mz37rwj14l38gd6f3m29c3wtm2lwc/T/com.microsoft.Outlook/Outlook Temp/1[3].htaccess",
+		"/Volumes/OnePlus Drivers/adb_config_Linux_OSX.sh",
+		"/Users/njosh1/Downloads/license.properties",
+		"/Users/njosh1/Downloads/opencart-2.0.3.1/README.md"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"Rannas",
+			"Rama",
+			"Rakesh",
+			"Rajeev",
+			"Ken",
+			"Arne",
+			"Fahad",
+			"Nader",
+			"Chris",
+			"Amol",
+			"INSERT INTO",
+			"video",
+			"visibility",
+			"imteUpdate",
+			"  \n",
+			"load",
+			"init()",
+			"hotspot",
+			"caption",
+			"sampleVideo",
+			"console",
+			"'overlay'",
+			"overlay",
+			"console",
+			"qtip",
+			"console",
+			"vidTime",
+			"hotespot",
+			"http://www.wideo.co/view/11615981446783950413?from=cp",
+			"databases",
+			"$databases"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/Users/njosh1/work/Florida Crystals/XT-Prototype/node_modules/grunt/node_modules/dateformat/node_modules/meow/node_modules/normalize-package-data/test/fixtures/npm.json",
+					"settings":
+					{
+						"buffer_size": 2826,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true
+}
