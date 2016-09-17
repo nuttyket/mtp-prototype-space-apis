@@ -1,0 +1,63 @@
+#title {
+	padding-top: 0px;
+	text-align: center;
+	color: rgba(0,0,0,0.4);
+}
+#camera_div {
+	text-align: center;
+	padding-top: 20px;
+}
+
+#my_camera {
+	margin: 0 auto;
+
+}
+
+#takepicbtn {
+	width: 1280px;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}
+
+#apikeyinput {
+	width: 1280px;
+	margin: 0 auto;
+	text-align: center;
+}
+
+#emotionresults {
+	text-align: center;
+	font-size: 14pt;
+	width: 1280px;
+	margin: 0 auto;
+}
+
+#subscription_content {
+	text-align: center;
+	padding-top: 10px;
+}
+
+#getlatestemotion {
+	width: 30%;
+}
+
+#emoji {
+	font-size: 90pt;
+}
+
+#content_registration_form {
+	text-align: center;
+	padding-top: 2%;
+/*    padding-left: 35%;*/
+}
+
+#input_table {
+	text-align: center;
+	font-size: 14pt;
+/*	width: 1280px;*/
+	margin: 0 auto;
+}
+
+tr, th, td {
+    padding: 15px;
+}

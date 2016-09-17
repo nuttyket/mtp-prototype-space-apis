@@ -1,0 +1,14 @@
+{
+  "name": "starter-node-angular",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "~1.4.2",
+    "express": "~4.5.1",
+    "method-override": "~2.0.2",
+    "mongoose": "~3.8.0",
+    "mssql": "^3.3.0",
+    "request": "^2.74.0",
+    "tedious": "^1.14.0",
+    "tree-kill": "^1.1.0"
+  }
+}
