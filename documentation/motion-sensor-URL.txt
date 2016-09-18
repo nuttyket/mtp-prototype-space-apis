@@ -1,0 +1,1 @@
+http://analytic-tool-receiver-1251788567.us-east-1.elb.amazonaws.com/stream/channels/data/variance.sapient.chicago.newhart/1474063489566/1474065189427?format=json&protocol=http&token=orcc4lhqfc8th8s0r7sqfudne7
