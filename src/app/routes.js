@@ -2,6 +2,7 @@
 var request = require('request');
 
 var mysql = require('mysql');
+
 //var bodyParser = require('body-parser')
 
 function getConnection() {
@@ -33,17 +34,11 @@ module.exports = function(app) {
         res.sendfile('./public/views/index.html'); // load our public/index.html file
     });
 //    app.use(this.bodyParser);
+
     app.get('/api/registerMessage', function(req, res) {
         console.log('Original URL : ' + req.query.json);
         console.log('Decoded URL : ' + decodeURIComponent(req.query.json));
-        
-//        console.log('Original BODY : ' + req.body.data);
-//        console.log('Decoded BODY  : ' + decodeURIComponent(req.body.data));
-//        console.log('JSON.parse    : ' + JSON.parse(req.body));
 
-        
-//        console.log('Body parser : ' + req.body);
-        
         var inputJson = JSON.parse(req.query.json);
         
         console.log('content_producer : ' + inputJson.content_producer);
@@ -102,7 +97,52 @@ module.exports = function(app) {
         });
     });
 
+    app.get('/api/getSoundMotionData', function(req, res) {
+        console.log(getSoundMotionDataURL());
+
+        request({
+            url: getSoundMotionDataURL(), //URL to hit
+            method: 'GET',
+            }, function(error, response, body){
+                if(error) {
+                    console.log(error);
+                    res.send(error);
+                } else {
+                    console.log(response.statusCode, body);
+                    var resStr = body.split('\r\n');
+                    console.log('Response String is : ' + resStr);
+                    console.log('Length : ' + resStr.length);
+
+                    var mysqlConn = getConnection(function(err) {
+                        if(err) {console.log('Error creating a connection : ' + err);}
+                    });
+
+                    for(var count=0; count < resStr.length - 1; count++) {
+                        console.log('ROW BEING INSERTED : ' + resStr[count]);
+                        //Because the split function replaces the last matched pattern as , causing ther to be a ghost row.
+                        if(resStr[count] !== '') {
+                            var json = JSON.parse(resStr[count]);
+                            writeSoundMotionDataToDB(json, mysqlConn);
+                        }
+                    }
+                    mysqlConn.end();
+                }
+        });
+        res.send('Success');
+    });
 };
+
+function getSoundMotionDataURL() {
+    var baseURL = 'http://analytic-tool-receiver-1251788567.us-east-1.elb.amazonaws.com/stream/channels/data/variance.sapient.chicago.newhart/';
+    var endURL = '?format=json&protocol=http&token=orcc4lhqfc8th8s0r7sqfudne7';
+//    var currentTime = Math.floor(new Date());
+    //Getting old data since there is no activity presently in Newhart. Eventually replace wit recent time stamps.
+    var currentTime = Math.floor(new Date()) - 86400000;
+    var tenSecondsBack = currentTime - 10000;
+    console.log('Current Time : ' + currentTime);
+    console.log('tenSecondsBack Time : ' + tenSecondsBack);
+    return (baseURL + tenSecondsBack + '/' + currentTime + endURL);
+}
 
 function analyzePhoto(data) {
     
@@ -158,6 +198,19 @@ function analyzePhoto(data) {
     writeToMySQLDB(timestamp, overallemotion_text, avg_anger.toFixed(9), avg_contempt.toFixed(9), avg_disgust.toFixed(9), avg_fear.toFixed(9), avg_happiness.toFixed(9), avg_neutral.toFixed(9), avg_sadness.toFixed(9), avg_surprise.toFixed(9), numberoffaces);
 }
 
+function writeSoundMotionDataToDB(inputJson, mysqlConn) {
+    var insertQuery = "INSERT sound_motion_data (epochtime, sound_total, sound_variance, motion_total, motion_variance) VALUES (" + Math.floor(inputJson.timestamp/1000) + ", '" + inputJson.sound_total + "', '" + inputJson.sound_variance + "', '" + inputJson.motion_total + "', '" + inputJson.motion_variance + "');"
+    console.log('INSERT QUERY : \n' + insertQuery);
+    mysqlConn.query(insertQuery, function(err, result) {
+        if(!err) {
+            console.log('Result of INSERT query : ' + result);
+            console.log('Values inserted : ' + result.affectedRows);
+        } else {
+            console.log('Error inserting into sound_motion_data : ' + err);
+        }
+    });
+}
+
 function writeRequestToDB(inputJson) {
     var mysqlConn = getConnection(function(err) {
         if(err) {console.log('Error creating a connection : ' + err);}
@@ -170,7 +223,7 @@ function writeRequestToDB(inputJson) {
             console.log('Result of INSERT query : ' + result);
             console.log('Values inserted : ' + result.affectedRows);
         } else {
-            console.log('Error inserting into faceframes : ' + err);
+            console.log('Error inserting into message_registry : ' + err);
         }
     });
     mysqlConn.end();    
