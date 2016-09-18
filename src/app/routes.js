@@ -77,19 +77,19 @@ module.exports = function(app) {
 
     });
 
-    app.post('/api/emotion', function(req, res) {
+    app.get('/api/emotion', function(req, res) {
         var mysqlConn = getConnection(function(err) {
             if(err) {console.log('Error creating a connection : ' + err);}
         });
         mysqlConn.connect();
-        var selQuery = 'SELECT * from faceframes ORDER BY ID DESC LIMIT 1;';
+        var selQuery = 'SELECT * from faceframes ORDER BY ID DESC;';
         mysqlConn.query(selQuery, function(err,rows, fields) {
             if(!err) {
                 console.log('# of rows : ' + rows.length);
                 var results = JSON.stringify(rows);
                 console.log('Column Values : ' + results);
                 mysqlConn.end();
-                res.send(results);
+                res.send(makeDisplayStr(JSON.parse(results)));
             } else {
                 console.log('Error selecting TOP 1 from from faceframes : ' + err);
                 mysqlConn.end();
@@ -99,6 +99,8 @@ module.exports = function(app) {
 
     app.get('/api/getSoundMotionData', function(req, res) {
         console.log(getSoundMotionDataURL());
+
+        var htmlStr = '<html><head></head><body><table border=1 align="center" width="100%"><tr><th>epochtime</th><th>sound_total</th><th>sound_variance</th><th>motion_total</th><th>motion_variance</th></tr>';
 
         request({
             url: getSoundMotionDataURL(), //URL to hit
@@ -116,21 +118,55 @@ module.exports = function(app) {
                     var mysqlConn = getConnection(function(err) {
                         if(err) {console.log('Error creating a connection : ' + err);}
                     });
-
-                    for(var count=0; count < resStr.length - 1; count++) {
-                        console.log('ROW BEING INSERTED : ' + resStr[count]);
+                    for(var count=0; count < resStr.length-1; count++) {
+                        console.log('ROW BEING INSERTED : ' + count + ' : ' + resStr[count]);
                         //Because the split function replaces the last matched pattern as , causing ther to be a ghost row.
                         if(resStr[count] !== '') {
                             var json = JSON.parse(resStr[count]);
                             writeSoundMotionDataToDB(json, mysqlConn);
+
+                            var rowData = '<tr><td>' + json.epochtime + '</td>';
+                            rowData += '<td>' + json.sound_total + '</td>';
+                            rowData += '<td>' + json.sound_variance + '</td>';
+                            rowData += '<td>' + json.motion_total + '</td>';
+                            rowData += '<td>' + json.motion_variance + '</td></tr>';
+                            console.log('Row Data : ' + rowData);
+                            htmlStr += rowData;
                         }
                     }
                     mysqlConn.end();
+                    htmlStr += '</table></body></html>';
+                    console.log('FULL HTML : ' + htmlStr);
+                    res.send(htmlStr);
                 }
         });
-        res.send('Success');
     });
 };
+
+
+function makeDisplayStr(results) {
+    var tableOpen = '<html><head></head><body><table border=1 align="center" width="100%">';
+    var tableClose = '</table>';
+    var resStr = tableOpen + '<tr><th>epochtime</th><th>number_of_faces</th><th>overall_emotion</th><th>anger</th><th>contempt</th><th>disgust</th><th>fear</th><th>happiness</th><th>neutral</th><th>sadness</th><th>surprise</th></tr>';
+    for(var count=0; count<results.length;count++) {
+        var rowData = '<tr><td>' + results[count].epochtime + '</td>';
+        rowData += '<td>' + results[count].number_of_faces + '</td>';
+        rowData += '<td>' + results[count].overall_emotion + '</td>';
+        rowData += '<td>' + results[count].anger + '</td>';
+        rowData += '<td>' + results[count].contempt + '</td>';
+        rowData += '<td>' + results[count].disgust + '</td>';
+        rowData += '<td>' + results[count].fear + '</td>';
+        rowData += '<td>' + results[count].happiness + '</td>';
+        rowData += '<td>' + results[count].neutral + '</td>';
+        rowData += '<td>' + results[count].sadness + '</td>';
+        rowData += '<td>' + results[count].surprise + '</td></tr>';
+        resStr+=rowData;
+    }
+    resStr += tableClose;
+
+    resStr += '</body></html>';
+    return resStr;
+}
 
 function getSoundMotionDataURL() {
     var baseURL = 'http://analytic-tool-receiver-1251788567.us-east-1.elb.amazonaws.com/stream/channels/data/variance.sapient.chicago.newhart/';
