@@ -1,4 +1,4 @@
-<!doctype html>
+    <!doctype html>
 
 <html lang="en">
 <head>
@@ -9,27 +9,28 @@
 
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-	<link rel="stylesheet" href="css/app.css">
+	<link rel="stylesheet" href="/css/app.css">
 
 </head>
 
 <body>
-
-	<h3 id="title"> Subscribing to Emotion API Demo </h3>
-	
 	<div id="subscription_content">
+        <h2></h2>
 <!--
 		<button class="btn btn-success" id="getlatestemotion"> Check how peeps are feeling!</button>
 		<br><br>
 -->
-		<div id="emotionresults"></div>
-		<img src="#" id="emoji">
-		<h2></h2>
+        <div id="emotionresults">
+            <div class="left-div" id="textresults"></div>
+            <div class="right-div" id="img">
+                <img src="#" id="emoji">
+            </div>
+        </div>
 	</div>
 
 	<script>
-        function showEmotion() {
-            console.log('Calling showEmotion');
+
+        function getFaceEmotion() {
 			$.ajax({
 		        type:"POST",
 		        beforeSend: function (request){
@@ -41,46 +42,170 @@
                     var result = JSON.parse(msg);
                     console.log("RESULT IS " + result[0]);
                     console.log("OVERALL EMOTION IS " + result[0].overall_emotion);
+                    return result[0];
+                }
+            });
+        }
 
-          			$("#emotionresults").html(result);
+        function getSoundMotionEmotion() {
+			$.ajax({
+		        type:"POST",
+		        beforeSend: function (request){
+		            request.setRequestHeader("Content-Type", "application/json");
+		        },
+		        url: "/api/soundAndMotion",
+		        success: function(msg) {
+		            console.log(msg);
+                    var result = JSON.parse(msg);
+                    console.log("RESULT IS SM : " + result[0]);
+//                    console.log("OVERALL EMOTION IS " + result[0].overall_emotion);
+                    return result[0];
+                }
+            });
+        }
 
-                    switch (result[0].overall_emotion) {
-					    case 'anger':
-					        $("#emoji").attr("src","img/anger.png");
-					        $("#subscription_content h2").html("Feeling a lot of anger!");
-					        break;
-					    case 'contempt':
-					        $("#emoji").attr("src","img/contempt.png");
-					        $("#subscription_content h2").html("Feeling a lot of contempt!");
-					        break;
-					    case 'disgust':
-					        $("#emoji").attr("src","img/disgust.png");
-					        $("#subscription_content h2").html("Feeling a lot of disgust!");
-					        break;
-					    case 'fear':
-					        $("#emoji").attr("src","img/fear.png");
-					        $("#subscription_content h2").html("Feeling a lot of fear!");
-					        break;
-					    case 'happiness':
-					        $("#emoji").attr("src","img/happy.png");
-					        $("#subscription_content h2").html("Feeling a lot of happiness!");
-					        break;
-					    case 'neutral':
-					        $("#emoji").attr("src","img/neutral.png");
-					        $("#subscription_content h2").html("Feeling neutral!");
-					        break;
-					    case 'sadness':
-					        $("#emoji").attr("src","img/sadness.png");
-					        $("#subscription_content h2").html("Feeling a lot of sadness!");
-					        break;
-					    case 'surprise':
-					        $("#emoji").attr("src","img/surprise.png");
-					        $("#subscription_content h2").html("Feeling surprised!");
-					        break;
-					}
+//        function showEmotion() {
+//
+//            var faceEmotion = getFaceEmotion();
+//            var smResults = getSoundMotionEmotion();
+//
+//            console.log('SHOW EMOTION (faceEmotion) : ' + faceEmotion);
+//            console.log('SHOW EMOTION (smResults) : ' + smResults);
+//        }
+
+//        function showEmotion() {
+//            console.log('Calling showEmotion');
+//			$.ajax({
+//		        type:"POST",
+//		        beforeSend: function (request){
+//		            request.setRequestHeader("Content-Type", "application/json");
+//		        },
+//		        url: "/api/emotion",
+//		        success: function(msg) {
+//		            console.log(msg);
+//                    var result = JSON.parse(msg);
+//                    console.log("RESULT IS " + result[0]);
+//
+//
+//                    console.log("OVERALL EMOTION IS " + result[0].overall_emotion);
+//
+//          			$("#emotionresults").html(result);
+//
+//                    switch (result[0].overall_emotion) {
+//					    case 'anger':
+//					        $("#emoji").attr("src","img/anger.png");
+//					        $("#subscription_content h2").html("Feeling a lot of anger!");
+//					        break;
+//					    case 'contempt':
+//					        $("#emoji").attr("src","img/contempt.png");
+//					        $("#subscription_content h2").html("Feeling a lot of contempt!");
+//					        break;
+//					    case 'disgust':
+//					        $("#emoji").attr("src","img/disgust.png");
+//					        $("#subscription_content h2").html("Feeling a lot of disgust!");
+//					        break;
+//					    case 'fear':
+//					        $("#emoji").attr("src","img/fear.png");
+//					        $("#subscription_content h2").html("Feeling a lot of fear!");
+//					        break;
+//					    case 'happiness':
+//					        $("#emoji").attr("src","img/happy.png");
+//					        $("#subscription_content h2").html("Feeling a lot of happiness!");
+//					        break;
+//					    case 'neutral':
+//					        $("#emoji").attr("src","/img/neutral.png");
+//					        $("#subscription_content h2").html("Feeling neutral!");
+//					        break;
+//					    case 'sadness':
+//					        $("#emoji").attr("src","img/sadness.png");
+//					        $("#subscription_content h2").html("Feeling a lot of sadness!");
+//					        break;
+//					    case 'surprise':
+//					        $("#emoji").attr("src","img/surprise.png");
+//					        $("#subscription_content h2").html("Feeling surprised!");
+//					        break;
+//					}
+//		        }
+//			});
+//        }
+
+        function showEmotion() {
+            console.log('Calling showEmotion');
+			$.ajax({
+		        type:"POST",
+		        beforeSend: function (request){
+		            request.setRequestHeader("Content-Type", "application/json");
+		        },
+		        url: "/api/emotion",
+		        success: function(msg) {
+		            console.log(msg);
+                    var faceResult = JSON.parse(msg);
+
+                    console.log("RESULT IS " + faceResult[0]);
+
+
+                    console.log("OVERALL EMOTION IS " + faceResult[0].overall_emotion);
+                    $.ajax({
+                        type:"POST",
+                        beforeSend: function (request){
+                            request.setRequestHeader("Content-Type", "application/json");
+                        },
+                        url: "/api/soundAndMotion",
+                        success: function(msg) {
+                            console.log(msg);
+                            var smResult = JSON.parse(msg);
+                            console.log("RESULT IS SM : " + smResult[0].avg_sound);
+
+                            var emotionrestults = '<h3>Parameters Measured : </h3>\n <h4>Facial Expression : </h4>' + faceResult[0].overall_emotion + '</br>' + '<h4>Avg Motion : </h4>' + smResult[0].avg_motion + '</br>' + '<h4>Avg Sound : </h4>' + smResult[0].avg_sound + '</br>' + '<h4>Motion Variance : </h4>' + smResult[0].motion_variance + '</br>' + '<h4>Sound Variance : </h4>' + smResult[0].sound_variance;
+
+                            $("#textresults").html(emotionrestults);
+
+                            switch (faceResult[0].overall_emotion) {
+                                case 'anger':
+                                    $("#emoji").attr("src","img/anger.png");
+                                    $("#subscription_content h2").html("Feeling a lot of anger!");
+                                    break;
+                                case 'contempt':
+                                    $("#emoji").attr("src","img/contempt.png");
+                                    $("#subscription_content h2").html("Feeling a lot of contempt!");
+                                    break;
+                                case 'disgust':
+                                    $("#emoji").attr("src","img/disgust.png");
+                                    $("#subscription_content h2").html("Feeling a lot of disgust!");
+                                    break;
+                                case 'fear':
+                                    $("#emoji").attr("src","img/fear.png");
+                                    $("#subscription_content h2").html("Feeling a lot of fear!");
+                                    break;
+                                case 'happiness':
+                                    $("#emoji").attr("src","img/happy.png");
+                                    $("#subscription_content h2").html("Feeling a lot of happiness!");
+                                    break;
+                                case 'neutral':
+                                    if(smResult[0].avg_motion > 10 && smResult[0].motion_variance > 2) {
+                                        $("#emoji").attr("src","/img/excited.png");
+                                        $("#subscription_content h2").html("Feeling Excited!");
+                                    } else {
+                                        $("#emoji").attr("src","/img/lethargic.png");
+//                                        $("#emoji").html("Feeling Lethargic");
+                                        $("#subscription_content h2").html("Feeling Lethargic!");
+                                    }
+                                    break;
+                                case 'sadness':
+                                    $("#emoji").attr("src","img/sadness.png");
+                                    $("#subscription_content h2").html("Feeling a lot of sadness!");
+                                    break;
+                                case 'surprise':
+                                    $("#emoji").attr("src","img/surprise.png");
+                                    $("#subscription_content h2").html("Feeling surprised!");
+                                    break;
+                            }
+                        }
+                   });
 		        }
 			});
         }
+
         window.addEventListener('load', showEmotion, false);
 //		setInterval(function(){
 //			$("#getlatestemotion").click();

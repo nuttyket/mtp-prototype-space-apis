@@ -61,3 +61,16 @@
 tr, th, td {
     padding: 15px;
 }
+
+h4 {
+    color: blue;
+}
+.left-div {
+    float: left;
+    width: 40%;
+    margin-top: 100px;
+    text-align: left;
+}
+.right-div {
+    margin-left: 108px;
+}
