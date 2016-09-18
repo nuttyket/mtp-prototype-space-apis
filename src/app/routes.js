@@ -97,6 +97,27 @@ module.exports = function(app) {
         });
     });
 
+    app.post('/api/emotion', function(req, res) {
+        var mysqlConn = getConnection(function(err) {
+            if(err) {console.log('Error creating a connection : ' + err);}
+        });
+        mysqlConn.connect();
+        var selQuery = 'SELECT * from faceframes ORDER BY ID DESC LIMIT 1;';
+        mysqlConn.query(selQuery, function(err,rows, fields) {
+            if(!err) {
+                console.log('# of rows : ' + rows.length);
+                var results = JSON.stringify(rows);
+                console.log('Column Values : ' + results);
+                mysqlConn.end();
+                res.send(results);
+            } else {
+                console.log('Error selecting TOP 1 from from faceframes : ' + err);
+                mysqlConn.end();
+            }
+        });
+    });
+
+
     app.get('/api/getSoundMotionData', function(req, res) {
         console.log(getSoundMotionDataURL());
 
