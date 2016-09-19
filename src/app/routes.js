@@ -27,6 +27,7 @@ module.exports = function(app) {
 //    });
 
     app.get('/getemotion', function(req, res) {
+        console.log('req.params.brandId : ' + req.params.brandId);
         res.sendfile('./public/views/index.html'); // load our public/index.html file
     });
     
@@ -83,6 +84,7 @@ module.exports = function(app) {
         });
         mysqlConn.connect();
         var selQuery = 'SELECT * from faceframes ORDER BY ID DESC;';
+
         mysqlConn.query(selQuery, function(err,rows, fields) {
             if(!err) {
                 console.log('# of rows : ' + rows.length);
@@ -103,13 +105,17 @@ module.exports = function(app) {
         });
         mysqlConn.connect();
         var selQuery = 'SELECT * from faceframes ORDER BY ID DESC LIMIT 1;';
+//        var selQueryMotionSound = 'SELECT * from processed_sound_motion_data ORDER BY ID DESC LIMIT 1;';
+        var faceResults = '';
+//        var smResults = '';
+
         mysqlConn.query(selQuery, function(err,rows, fields) {
             if(!err) {
                 console.log('# of rows : ' + rows.length);
-                var results = JSON.stringify(rows);
-                console.log('Column Values : ' + results);
+                faceResults = JSON.stringify(rows);
+                console.log('Column Values : ' + faceResults);
                 mysqlConn.end();
-                res.send(results);
+                res.send(faceResults);
             } else {
                 console.log('Error selecting TOP 1 from from faceframes : ' + err);
                 mysqlConn.end();
@@ -117,6 +123,28 @@ module.exports = function(app) {
         });
     });
 
+    app.post('/api/soundAndMotion', function(req, res) {
+        var mysqlConn = getConnection(function(err) {
+            if(err) {console.log('Error creating a connection : ' + err);}
+        });
+        mysqlConn.connect();
+        var selQuery = 'SELECT * from processed_sound_motion_data ORDER BY ID DESC LIMIT 1;';
+        var smResults = '';
+
+        mysqlConn.query(selQuery, function(err,rows, fields) {
+            if(!err) {
+                console.log('# of rows : ' + rows.length);
+                smResults = JSON.stringify(rows);
+                console.log('Column Values : ' + smResults);
+                mysqlConn.end();
+                res.send(smResults);
+            } else {
+                console.log('Error selecting TOP 1 from from faceframes : ' + err);
+                mysqlConn.end();
+            }
+        });
+
+    });
 
     app.get('/api/getSoundMotionData', function(req, res) {
         console.log(getSoundMotionDataURL());
@@ -139,6 +167,16 @@ module.exports = function(app) {
                     var mysqlConn = getConnection(function(err) {
                         if(err) {console.log('Error creating a connection : ' + err);}
                     });
+
+                    var totalSound = 0;
+                    var totalMotion = 0;
+                    var isSoundVariance = 0;//0 is false 1 is true
+                    var isMotionVariance = 0;//0 is false 1 is true
+                    var prevMotionVariance = 0;
+                    var prevSoundVariance = 0;
+                    var soundVarThreshold = 1;
+                    var motionVarThreshold = 1;
+
                     for(var count=0; count < resStr.length-1; count++) {
                         console.log('ROW BEING INSERTED : ' + count + ' : ' + resStr[count]);
                         //Because the split function replaces the last matched pattern as , causing ther to be a ghost row.
@@ -153,8 +191,29 @@ module.exports = function(app) {
                             rowData += '<td>' + json.motion_variance + '</td></tr>';
                             console.log('Row Data : ' + rowData);
                             htmlStr += rowData;
+                            totalMotion += json.motion_total;
+                            totalSound += json.sound_total;
+                            if(count > 0) {
+                                if(isMotionVariance < 1) {
+                                    isMotionVariance = (Math.abs(json.motion_variance - prevMotionVariance) > motionVarThreshold) ? 1 : 0;
+                                }
+                                if(isSoundVariance < 1) {
+                                    isSoundVariance = (Math.abs(json.sound_variance - prevSoundVariance) > soundVarThreshold) ? 1 : 0;
+                                }
+                                console.log('Interim isMotionVariance = ' + isMotionVariance);
+                                console.log('Interim isSoundVariance = ' + isSoundVariance);
+                            }
+                                prevMotionVariance = json.motion_variance;
+                                prevSoundVariance = json.sound_variance;
                         }
                     }
+                    var avgMotion = totalMotion/(resStr.length-1);
+                    var avgSound = totalSound/(resStr.length-1);
+                    console.log('Avg Sound = ' + avgSound);
+                    console.log('Avg Motion = ' + avgMotion);
+                    console.log('isMotionVariance = ' + isMotionVariance);
+                    console.log('isSoundVariance = ' + isSoundVariance);
+                    writeProcessedSoundMotionData(avgSound, avgMotion, isMotionVariance, isSoundVariance, mysqlConn);
                     mysqlConn.end();
                     htmlStr += '</table></body></html>';
                     console.log('FULL HTML : ' + htmlStr);
@@ -164,6 +223,18 @@ module.exports = function(app) {
     });
 };
 
+function writeProcessedSoundMotionData(avgSound, avgMotion, isMotionVariance, isSoundVariance, mysqlConn) {
+    var insertQuery = "INSERT processed_sound_motion_data (epochtime, avg_sound, avg_motion, sound_variance, motion_variance) VALUES (" + Math.floor(new Date()/1000) + ", '" + avgSound + "', '" + avgMotion + "', '" + isSoundVariance + "', '" + isMotionVariance + "');"
+    console.log('INSERT QUERY : \n' + insertQuery);
+    mysqlConn.query(insertQuery, function(err, result) {
+        if(!err) {
+            console.log('Result of INSERT query : ' + result);
+            console.log('Values inserted : ' + result.affectedRows);
+        } else {
+            console.log('Error inserting into processed_sound_motion_data : ' + err);
+        }
+    });
+}
 
 function makeDisplayStr(results) {
     var tableOpen = '<html><head></head><body><table border=1 align="center" width="100%">';
