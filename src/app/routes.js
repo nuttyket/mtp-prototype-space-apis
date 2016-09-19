@@ -26,7 +26,7 @@ module.exports = function(app) {
 //        res.sendfile('./public/views/index.html'); // load our public/index.html file
 //    });
 
-    app.get('/getemotion/:brandId', function(req, res) {
+    app.get('/getemotion', function(req, res) {
         console.log('req.params.brandId : ' + req.params.brandId);
         res.sendfile('./public/views/index.html'); // load our public/index.html file
     });
